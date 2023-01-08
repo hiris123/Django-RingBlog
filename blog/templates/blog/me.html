@@ -1,0 +1,37 @@
+{% extends 'blog/base.html' %}
+
+{% block main_area %}
+
+    <span>"USER NAME : " {{user.username}} </span>
+    <br><br>
+    <span>"USER EMAIL : " {{user.email}} </span>
+    <br><br>
+     {% if post_list.exists %}
+            {% for post in post_list %}
+                {% if post.comment_set.exists %}
+                        {% for comment in post.comment_set.iterator %}
+                            {% if user.is_authenticated and comment.author == user %}
+                            <div class="container">
+                               <div class="fw-bold">{{comment.author.username}}
+                                <small class="text_muted">{{comment.created_at}}</small>
+                                </div>
+
+                                <a
+                                               href="{{post.get_absolute_url}}">
+                                                {{comment.content | linebreaks}}
+                                            </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+            {% endfor %}
+    {% endif %}
+
+
+
+<!-- {block head_title} 을 선언하지 않으면 자동으로 base.html에 있는 Blog 사용 -->
+<!-- if문이 종료되는 시점에 꼭 endif를 써주어야 한다. -->
+
+
+
+{% endblock %}
